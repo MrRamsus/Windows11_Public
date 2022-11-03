@@ -12,7 +12,7 @@
     StopAppName = The name of the process name you will stop
     StartProcessName = The name of the process name you will start (same as StopAppName)
     File = The file you will start (path with exe file)
-    Args = The arguments you will use with the start of the process.
+    Arguments = The arguments you will use with the start of the process.
 .EXAMPLE
 	PS> ./ClearTeamsCache.ps1
 .LINK
@@ -47,10 +47,11 @@ Function Stop-Application{
     }
 }
 
-Function Cleanup-Folders{
+Function CleanupFolders{
     param(
         $Mainfolder,
-        $FolderList)
+        $FolderList
+        )
     foreach ($Folder in $FolderList){
     $Path = $MainFolder+$Folder
         Get-Childitem -Path $Path\* -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
@@ -58,15 +59,15 @@ Function Cleanup-Folders{
 }
 
 Function Start-Application{
-    Param(
-        $StartProcessName
+    param(
+        $StartProcessName,
         $File,
-        $Args
-    )
+        $Arguments
+        )
     $ProcessList = Get-Process $StartProcessName -ErrorAction SilentlyContinue
     If(!($ProcessList)){
         try {
-                Start-Process -FilePath $File -ArgumentList $args -ErrorAction Stop | Out-Null
+            Start-Process -FilePath $File -ArgumentList $Arguments -ErrorAction Stop | Out-Null
             }
             catch {
                 Write-Host "$StartProcessName couldn't been started" -Backgroundcolor Red
@@ -76,5 +77,5 @@ Function Start-Application{
 
 ##Script
 Stop-Application -StopProcessName "Teams" 
-Cleanup-Folders -MainFolder $MainFolder -FolderList $FolderList
-Start-Application -StartProcessName "Teams" -File "$env:LOCALAPPDATA\Microsoft\Teams\Update.exe" -Args '--processStart "Teams.exe"'
+CleanupFolders -MainFolder $MainFolder -FolderList $FolderList
+Start-Application -StartProcessName "Teams" -File "$env:LOCALAPPDATA\Microsoft\Teams\Update.exe" -Arguments '--processStart "Teams.exe"'
