@@ -9,8 +9,11 @@
     - run dism Cleanup-image and sfc /scannow commands
     - Run Cleanmanager
     - Optimize your SSD drive (Re-Trim)
+    - Popup message with the info that you need to reboot your device.
 .PARAMETER message
     ServiceName = The service name for Sysmain.
+    Header = The header of the popup message.
+    Message = The message what will show in the popup.
 .EXAMPLE
 	PS> ./Fix-HighMemory_W10_W11.ps1
 .LINK
@@ -109,7 +112,18 @@ Function StartCleanMGR {
         Write-host "cleanmgr is not installed! To use this portion of the script you must install the following windows features:" -ForegroundColor Red -NoNewline
         Write-host "Desktop-Experience, Ink-Handwriting" -ForegroundColor Red -BackgroundColor black
     }
-} 
+}
+
+Function TriggerPopUp{
+    Param(
+        $Header,
+        $Message
+    )
+    $notify = new-object system.windows.forms.notifyicon
+    $notify.icon = [System.Drawing.SystemIcons]::Information
+    $notify.visible = $true
+    $notify.showballoontip(10,$Header,$Message,[system.windows.forms.tooltipicon]::None)
+}
 
 #Scriptblok
 RunAsAdmin
@@ -119,4 +133,4 @@ DisableService -ServiceName "Sysmain"
 RunCMDCommands
 OptimizeSSD
 StartCleanMGR
-
+TriggerPopUp -Header "Reboot Required" -Message "You will need to restart this device for the completion of this fix!"
