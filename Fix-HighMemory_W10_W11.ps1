@@ -11,7 +11,6 @@
     - Optimize your SSD drive (Re-Trim)
 .PARAMETER message
     ServiceName = The service name for Sysmain.
-    
 .EXAMPLE
 	PS> ./Fix-HighMemory_W10_W11.ps1
 .LINK
@@ -19,6 +18,7 @@
 .NOTES
 	Author: MrRamsus
 #>
+
 Function RunAsAdmin{
     if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit }
 }
