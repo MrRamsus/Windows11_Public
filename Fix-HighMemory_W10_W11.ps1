@@ -15,7 +15,7 @@
 .EXAMPLE
 	PS> ./Fix-HighMemory_W10_W11.ps1
 .LINK
-	https://github.com/MrRamsus/Windows11_Public/blob/main/Fix-HighMemory_W10_W11.ps1.ps1
+	https://github.com/MrRamsus/Windows11_Public/blob/main/Fix-HighMemory_W10_W11.ps1
 .NOTES
 	Author: MrRamsus
 #>
