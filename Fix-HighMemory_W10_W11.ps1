@@ -11,6 +11,9 @@
     - Optimize your SSD drive (Re-Trim)
     - Popup message with the info that you need to reboot your device.
 .PARAMETER message
+    Path = The pathn of the regkey
+    Name = Regkey name
+    Value = The value of the regkey name
     ServiceName = The service name for Sysmain.
     Header = The header of the popup message.
     Message = The message what will show in the popup.
@@ -26,48 +29,30 @@ Function RunAsAdmin{
     if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit }
 }
 
-Function RegeditNDUStart(){
-    $NDUStart = Get-Itemproperty -Path "HKLM:SYSTEM\ControlSet001\Services\Ndu" -Name "Start" -ErrorAction SilentlyContinue
-    #Write-Host Default value: 2
-    if($NDUStart){
-        If($NDUStart.Start -ne "4"){
+Function ChangeRegKey{
+    Param(
+        $Path,
+        $Name,
+        $Value
+    )
+    $Regkey = Get-Itemproperty -Path $Path -Name $Name -ErrorAction SilentlyContinue
+    if($Regkey){
+        If($Regkey.$Name -ne $Value){
                 try {
-                    Set-ItemProperty "HKLM:SYSTEM\ControlSet001\Services\Ndu" -Name "Start" -Value "4" -ErrorAction Stop
+                    Set-ItemProperty -Path $Path -Name $Name -Value $Value -ErrorAction Stop
                 }
                 catch {
-                    Write-Host "Start can not be changed" -BackgroundColor Red -ForegroundColor White
+                    Write-Host "Regkey $Name can not be changed" -BackgroundColor Red -ForegroundColor White
                 }
             }
         }else{
                 try {
-                    New-ItemProperty -Path "HKLM:SYSTEM\ControlSet001\Services\Ndu" -Name "Start" -Value "4" -ErrorAction Stop
+                    New-ItemProperty -Path $Path -Name $Name -Value $Value -ErrorAction Stop
                 }
                 catch {
-                    Write-Host "Start can not be created" -BackgroundColor Red -ForegroundColor White
+                    Write-Host "Regkey $Name can not be created" -BackgroundColor Red -ForegroundColor White
                 }
             }
-}
-
-Function RegeditClearPageFileAtShutdown(){
-    $ClearPageFileAtShutdown = Get-Itemproperty -Path "HKLM:SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" -Name "ClearPageFileAtShutdown" -ErrorAction SilentlyContinue
-    #Write-Host Default value: 0
-    if($ClearPageFileAtShutdown){
-        If($ClearPageFileAtShutdown.ClearPageFileAtShutdown -ne 1){
-            try {
-                Set-ItemProperty "HKLM:SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" -Name "ClearPageFileAtShutdown" -Value "1" -ErrorAction Stop
-            }
-            catch {
-                Write-Host "ClearPageFileAtShutdown can not be changed" -BackgroundColor Red -ForegroundColor White
-            }
-        }
-    }else{
-        try {
-            New-ItemProperty -Path "HKLM:SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" -Name "ClearPageFileAtShutdown" -Value "1" -ErrorAction Stop
-        }
-        catch {
-            Write-Host "ClearPageFileAtShutdown can not be created" -BackgroundColor Red -ForegroundColor White
-        }
-    }
 }
 
 Function DisableService{
@@ -127,8 +112,8 @@ Function TriggerPopUp{
 
 #Scriptblok
 RunAsAdmin
-RegeditNDUStart
-RegeditClearPageFileAtShutdown
+ChangeRegKey -Path "HKLM:SYSTEM\ControlSet001\Services\Ndu" -Name "Start" -Value "4"
+ChangeRegKey -Path "HKLM:SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" -Name "ClearPageFileAtShutdown" -Value "1"
 DisableService -ServiceName "Sysmain"
 RunCMDCommands
 OptimizeSSD
