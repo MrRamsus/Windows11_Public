@@ -21,7 +21,7 @@
 #>
 
 #Vars
-$UserData = "C:\Users\RamziMons\AppData\Local\BraveSoftware\Brave-Browser\User Data"
+$UserData = "C:\Users\USERNAME\AppData\Local\BraveSoftware\Brave-Browser\User Data" #Change the username
 $SourceFolderName = "Default" #This is the template profile folder name
 $ProfilePrefix = "Profile"
 $ExcludeFolderFile = "NoCopySync.txt" #When this file is located in the root of the profile folder, this profile will not replaced with the default profile. This one will skipped
