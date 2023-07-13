@@ -36,32 +36,32 @@
 	Author: MrRamsus
 #>
 
-#Vars
-$Browser = "brave" #[brave | chrome | msedge]
+#Vars needs to be filled
+$Browser = "brave" #[ "brave" | "chrome" | "msedge" ]
 $UserName = "UserName"
 $TemplateFolderName = "Default" #This is the template profile folder name
 $ProfilePrefix = "Profile"
 $ExcludeFolderFile = "NoCopySync.txt" #When this file is located in the root of the profile folder, this profile will not replaced with the default profile. This one will skipped
 
-#Don't change below this line
-if($Browser -eq "brave"){
+#Automation Vars.
+# Don't change below this line!
+If($Browser -eq "brave"){
     $UserData = "C:\Users\$UserName\AppData\Local\BraveSoftware\Brave-Browser\User Data" #Change the username #See .PARAMETER message for known alternative value
-    $ProcessName = "brave" #See .PARAMETER message for known alternative value [brave | chrome | msedge]
-
+    $ProcessName = "brave" #See .PARAMETER message for known alternative value [ "brave" | "chrome" | "msedge" ]
 }
-Elseif($Browser -eq "chrome"){
+ElseIf($Browser -eq "chrome"){
     $UserData = "C:\Users\$UserName\AppData\Local\Google\Chrome\User Data" #Change the username #See .PARAMETER message for known alternative value
-    $ProcessName = "chrome" #See .PARAMETER message for known alternative value [brave | chrome | msedge]
+    $ProcessName = "chrome" #See .PARAMETER message for known alternative value [ "brave" | "chrome" | "msedge" ]
 }
-Elseif($Browser -eq "msedge"){
+ElseIf($Browser -eq "msedge"){
     $UserData = "C:\Users\$UserName\AppData\Local\Microsoft\Edge\User Data" #Change the username #See .PARAMETER message for known alternative value
-    $ProcessName = "msedge" #See .PARAMETER message for known alternative value [brave | chrome | msedge]
+    $ProcessName = "msedge" #See .PARAMETER message for known alternative value [ "brave" | "chrome" | "msedge" ]
 }
-
 $ProfileList = (Get-ChildItem -Path $UserData -Directory | Where-Object {$_.Name -like "$ProfilePrefix *" -and $_.Name -ne $TemplateFolderName}).Name
 $ProcessCheck = get-process $ProcessName -ErrorAction SilentlyContinue
 
 #Start script
+# Don't change below this line!
 #Stop the browser process. This is needed to remove/copy the profile data
 IF($ProcessCheck){
     Try{
