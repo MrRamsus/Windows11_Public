@@ -3,7 +3,7 @@
 	Copy template settings Brave (Chromium) profiles to all other profiles.
 .DESCRIPTION
 	With this script, the following actions will be done:
-    - Stop brave process
+    - Stop the browser process
     - Profile folders will be cleaned
     - Profile folders will be filled with the template profile files
 .PARAMETER message
@@ -33,7 +33,7 @@ $ProcessCheck = get-process $ProcessName -ErrorAction SilentlyContinue
 $SourceFolder = "$Userdata\$SourceFolderName"
 
 #Start script
-#Stop Brave process. This is needed to remove/copy the profile data
+#Stop the browser process. This is needed to remove/copy the profile data
 IF($ProcessCheck){
     Try{
         Stop-Process -Name $ProcessName -Force -ErrorAction Stop
