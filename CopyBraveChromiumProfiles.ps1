@@ -27,7 +27,7 @@ $ProfilePrefix = "Profile"
 $ExcludeFolderFile = "NoCopySync.txt" #When this file is located in the root of the profile folder, this profile will not replaced with the default profile. This one will skipped
 $ProcessName = "Brave"
 
-#Do'nt change this
+#Don't change below this line
 $ProfileList = (Get-ChildItem -Path $SourceFolders -Directory | Where-Object {$_.Name -like "$ProfilePrefix *"}).Name
 $ProcessCheck = get-process $ProcessName -ErrorAction SilentlyContinue
 $SourceFolder = "$Userdata\$SourceFolderName"
