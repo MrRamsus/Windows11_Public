@@ -9,15 +9,15 @@
 .PARAMETER message
     $UserData = The location of the browser user data [Line 30]
       - For brave use: "C:\Users\USERNAME\AppData\Local\BraveSoftware\Brave-Browser\User Data"
-      - For edge use: "C:\Users\UserName\AppData\Local\Microsoft\Edge\User Data"
       - For chrome use: "C:\Users\UserName\AppData\Local\Google\Chrome\User Data"
+      - For edge use: "C:\Users\UserName\AppData\Local\Microsoft\Edge\User Data"
     $TemplateFolderName = The folder name of your default profile (Template profile) [Line31].
     $ProfilePrefix = The prefixname of all profiles [Line 32]
     $ExcludeFolderFile = A filename which is be used to exclude that folder profile for this actions [Line 33]
     $ProcessName = The process name of the Brave (chromium) application [Line 34]
       - For Brave use: "brave"
-      - For Edge use: "msedge"
       - For chrome use: "chrome"
+      - For Edge use: "msedge"
 .EXAMPLE
 	PS> ./CopyChromiumProfiles.ps1
 .LINK
