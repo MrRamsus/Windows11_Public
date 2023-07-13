@@ -20,13 +20,14 @@
       - For Brave use: "brave"
       - For chrome use: "chrome"
       - For Edge use: "msedge"
-.HOWTOUSE
+.EXAMPLE
+How to use this script:
 	1. When you start the browser for the first time, you need to create one profile as template. Change every setting you need to use for other profiles.
  	2. You have to know which browser you use. Change the var "$Browser" to the correct browser.
-    3. Change the value "$UserName" with your windows username shown in "c:\users"
+    	3. Change the value "$UserName" with your windows username shown in "c:\users"
  	4. Notice your template profile folder name (For Brave and Chrome, the first profile will be named "Default". In Edge, the first profile will be named "Profile 1". Check it in the app data and check which profile has been changed.
    	5. If needed, create a file to exclude that profile for this script. In that case, the template settings will not be copied to that profile.
-    6. Run the script.
+    	6. Run the script.
 .EXAMPLE
 	PS> ./CopyChromiumProfiles.ps1
 .LINK
