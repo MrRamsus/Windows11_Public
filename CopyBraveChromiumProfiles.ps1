@@ -8,7 +8,7 @@
     - Profile folders will be filled with the template profile files
 .PARAMETER message
     $UserData = The location of the browser user data
-    $SourceFolderName = The folder name of your default profile (Template profile)
+    $TemplateFolderName = The folder name of your default profile (Template profile)
     $ProfilePrefix = The prefixname of all profiles
     $ExcludeFolderFile = A filename which is be used to exclude that folder profile for this actions
     $ProcessName = The process name of the Brave (chromium) application
@@ -22,15 +22,14 @@
 
 #Vars
 $UserData = "C:\Users\USERNAME\AppData\Local\BraveSoftware\Brave-Browser\User Data" #Change the username
-$SourceFolderName = "Default" #This is the template profile folder name
+$TemplateFolderName = "Default" #This is the template profile folder name
 $ProfilePrefix = "Profile"
 $ExcludeFolderFile = "NoCopySync.txt" #When this file is located in the root of the profile folder, this profile will not replaced with the default profile. This one will skipped
 $ProcessName = "Brave"
 
 #Don't change below this line
-$ProfileList = (Get-ChildItem -Path $SourceFolders -Directory | Where-Object {$_.Name -like "$ProfilePrefix *"}).Name
+$ProfileList = (Get-ChildItem -Path $UserData -Directory | Where-Object {$_.Name -like "$ProfilePrefix *" -and $_.Name -ne $TemplateFolderName}).Name
 $ProcessCheck = get-process $ProcessName -ErrorAction SilentlyContinue
-$SourceFolder = "$Userdata\$SourceFolderName"
 
 #Start script
 #Stop the browser process. This is needed to remove/copy the profile data
@@ -50,7 +49,7 @@ Foreach($Profile in $ProfileList){
     If((Test-Path $Checkfile) -eq $False){
         Try{
             Remove-Item "$UserData\$Profile\*" -Recurse -ErrorAction Stop
-            Copy-Item -Path "$SourceFolder\*" -Destination "$UserData\$Profile" -recurse -ErrorAction Stop
+            Copy-Item -Path "$Userdata\$TemplateFolderName\*" -Destination "$UserData\$Profile" -recurse -ErrorAction Stop
         }
         Catch{
             Write-Host "There are some errors with the removal and/or copy of the content for $Profile. Please check manually" -ForegroundColor White -BackgroundColor Red
