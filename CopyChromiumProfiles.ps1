@@ -1,31 +1,35 @@
 <#
 .SYNOPSIS
-	Copy template settings Brave (Chromium) profiles to all other profiles.
+	Copy template settings Chromium (Brave / Edge) profiles to all other profiles.
 .DESCRIPTION
 	With this script, the following actions will be done:
     - Stop the browser process
     - Profile folders will be cleaned
     - Profile folders will be filled with the template profile files
 .PARAMETER message
-    $UserData = The location of the browser user data
-    $TemplateFolderName = The folder name of your default profile (Template profile)
-    $ProfilePrefix = The prefixname of all profiles
-    $ExcludeFolderFile = A filename which is be used to exclude that folder profile for this actions
-    $ProcessName = The process name of the Brave (chromium) application
+    $UserData = The location of the browser user data [Line 28]
+      - For brave use: "C:\Users\USERNAME\AppData\Local\BraveSoftware\Brave-Browser\User Data"
+      - For edge use: "C:\Users\UserName\AppData\Local\Microsoft\Edge\User Data"
+    $TemplateFolderName = The folder name of your default profile (Template profile) [Line29]
+    $ProfilePrefix = The prefixname of all profiles [Line 30]
+    $ExcludeFolderFile = A filename which is be used to exclude that folder profile for this actions [Line 31]
+    $ProcessName = The process name of the Brave (chromium) application [Line 32]
+      - For Brave use: "Brave"
+      - For Edge use: "msedge"
 .EXAMPLE
-	PS> ./CopyBraveChromiumProfiles.ps1
+	PS> ./CopyChromiumProfiles.ps1
 .LINK
-	https://github.com/MrRamsus/Windows11_Public/blob/main/CopyBraveChromiumProfiles.ps1
+	https://github.com/MrRamsus/Windows11_Public/blob/main/CopyChromiumProfiles.ps1
 .NOTES
 	Author: MrRamsus
 #>
 
 #Vars
-$UserData = "C:\Users\USERNAME\AppData\Local\BraveSoftware\Brave-Browser\User Data" #Change the username
+$UserData = "C:\Users\USERNAME\AppData\Local\BraveSoftware\Brave-Browser\User Data" #Change the username #See .PARAMETER message for known alternative value
 $TemplateFolderName = "Default" #This is the template profile folder name
 $ProfilePrefix = "Profile"
 $ExcludeFolderFile = "NoCopySync.txt" #When this file is located in the root of the profile folder, this profile will not replaced with the default profile. This one will skipped
-$ProcessName = "Brave"
+$ProcessName = "Brave" #See .PARAMETER message for known alternative value
 
 #Don't change below this line
 $ProfileList = (Get-ChildItem -Path $UserData -Directory | Where-Object {$_.Name -like "$ProfilePrefix *" -and $_.Name -ne $TemplateFolderName}).Name
