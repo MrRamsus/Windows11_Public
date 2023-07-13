@@ -7,17 +7,26 @@
     - Profile folders will be cleaned
     - Profile folders will be filled with the template profile files
 .PARAMETER message
-    $UserData = The location of the browser user data [Line 30]
-      - For brave use: "C:\Users\USERNAME\AppData\Local\BraveSoftware\Brave-Browser\User Data"
-      - For chrome use: "C:\Users\USERNAME\AppData\Local\Google\Chrome\User Data"
-      - For edge use: "C:\Users\USERNAME\AppData\Local\Microsoft\Edge\User Data"
-    $TemplateFolderName = The folder name of your default profile (Template profile) [Line31].
-    $ProfilePrefix = The prefixname of all profiles [Line 32]
-    $ExcludeFolderFile = A filename which is be used to exclude that folder profile for this actions [Line 33]
-    $ProcessName = The process name of the Brave (chromium) application [Line 34]
+    $Browser = Choose the browser you use. [brave | chrome | msedge]
+    $UserName = This is your windows username as shown in "c:\users"
+    $TemplateFolderName = The folder name of your default profile (Template profile) [Line under #Vars]
+    $ProfilePrefix = The prefixname of all profiles [Line under #Vars]
+    $ExcludeFolderFile = A filename which is be used to exclude that folder profile for this actions [Line under #Vars]
+    $UserData = The location of the browser user data. This value will automatically be filled after you choose your $Browser
+      - For brave use: "C:\Users\$UserName\AppData\Local\BraveSoftware\Brave-Browser\User Data"
+      - For chrome use: "C:\Users\$UserName\AppData\Local\Google\Chrome\User Data"
+      - For edge use: "C:\Users\$UserName\AppData\Local\Microsoft\Edge\User Data"
+    $ProcessName = The process name of the Brave (chromium) application. This value will automatically be filled after you choose your $Browser
       - For Brave use: "brave"
       - For chrome use: "chrome"
       - For Edge use: "msedge"
+.HOWTOUSE
+	1. When you start the browser for the first time, you need to create one profile as template. Change every setting you need to use for other profiles.
+ 	2. You have to know which browser you use. Change the var "$Browser" to the correct browser.
+    3. Change the value "$UserName" with your windows username shown in "c:\users"
+ 	4. Notice your template profile folder name (For Brave and Chrome, the first profile will be named "Default". In Edge, the first profile will be named "Profile 1". Check it in the app data and check which profile has been changed.
+   	5. If needed, create a file to exclude that profile for this script. In that case, the template settings will not be copied to that profile.
+    6. Run the script.
 .EXAMPLE
 	PS> ./CopyChromiumProfiles.ps1
 .LINK
@@ -27,13 +36,27 @@
 #>
 
 #Vars
-$UserData = "C:\Users\USERNAME\AppData\Local\BraveSoftware\Brave-Browser\User Data" #Change the username #See .PARAMETER message for known alternative value
+$Browser = "brave" #[brave | chrome | msedge]
+$UserName = "UserName"
 $TemplateFolderName = "Default" #This is the template profile folder name
 $ProfilePrefix = "Profile"
 $ExcludeFolderFile = "NoCopySync.txt" #When this file is located in the root of the profile folder, this profile will not replaced with the default profile. This one will skipped
-$ProcessName = "Brave" #See .PARAMETER message for known alternative value
 
 #Don't change below this line
+if($Browser -eq "brave"){
+    $UserData = "C:\Users\$UserName\AppData\Local\BraveSoftware\Brave-Browser\User Data" #Change the username #See .PARAMETER message for known alternative value
+    $ProcessName = "brave" #See .PARAMETER message for known alternative value [brave | chrome | msedge]
+
+}
+Elseif($Browser -eq "chrome"){
+    $UserData = "C:\Users\$UserName\AppData\Local\Google\Chrome\User Data" #Change the username #See .PARAMETER message for known alternative value
+    $ProcessName = "chrome" #See .PARAMETER message for known alternative value [brave | chrome | msedge]
+}
+Elseif($Browser -eq "msedge"){
+    $UserData = "C:\Users\$UserName\AppData\Local\Microsoft\Edge\User Data" #Change the username #See .PARAMETER message for known alternative value
+    $ProcessName = "msedge" #See .PARAMETER message for known alternative value [brave | chrome | msedge]
+}
+
 $ProfileList = (Get-ChildItem -Path $UserData -Directory | Where-Object {$_.Name -like "$ProfilePrefix *" -and $_.Name -ne $TemplateFolderName}).Name
 $ProcessCheck = get-process $ProcessName -ErrorAction SilentlyContinue
 
