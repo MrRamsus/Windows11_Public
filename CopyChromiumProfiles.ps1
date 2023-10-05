@@ -80,7 +80,6 @@ Foreach($Profile in $ProfileList){
     #Will only applied when the $ExcludeFolderFile doesn't exist in the profile folder
     If((Test-Path $Checkfile) -eq $False){
         Try{
-            #Remove-Item "$UserData\$Profile\*" -Recurse -ErrorAction Stop
             foreach($File in $CopyFileList){
 				Copy-Item -Path "$Userdata\$TemplateFolderName\$File" -Destination "$UserData\$Profile" -recurse -ErrorAction Stop
 			}
