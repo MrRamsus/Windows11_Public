@@ -39,7 +39,7 @@
 
 #Vars needs to be filled
 $Browser = "brave" #[ "brave" | "chrome" | "msedge" ]
-$UserName = "RamziMons"
+$UserName = "username"
 $TemplateFolderName = "Default" #This is the template profile folder name
 $ProfilePrefix = "Profile"
 $ExcludeFolderFile = "NoCopySync.txt" #When this file is located in the root of the profile folder, this profile will not replaced with the default profile. This one will skipped
