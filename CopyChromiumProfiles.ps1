@@ -39,7 +39,7 @@
 
 #Vars needs to be filled
 $Browser = "brave" #[ "brave" | "chrome" | "msedge" ]
-$UserName = "RamziMons"
+$UserName = "CustomUserName" # Fill only this value if you run this script with another user
 $TemplateFolderName = "Default" #This is the template profile folder name
 $ProfilePrefix = "Profile"
 $ExcludeFolderFile = "NoCopySync.txt" #When this file is located in the root of the profile folder, this profile will not replaced with the default profile. This one will skipped
@@ -47,6 +47,9 @@ $CopyFileList = @("Bookmarks","Favicons","Preferences","PreferredApps","Secure P
 
 #Automation Vars.
 # Don't change below this line!
+if ($UserName -ne "Username") {
+	$UserName = [System.Environment]::UserName
+}
 If($Browser -eq "brave"){
     $UserData = "C:\Users\$UserName\AppData\Local\BraveSoftware\Brave-Browser\User Data" #Change the username #See .PARAMETER message for known alternative value
     $ProcessName = "brave" #See .PARAMETER message for known alternative value [ "brave" | "chrome" | "msedge" ]
