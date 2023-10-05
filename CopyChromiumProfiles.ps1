@@ -20,6 +20,7 @@
 		- For Brave use: "brave"
 		- For chrome use: "chrome"
 		- For Edge use: "msedge"
+	$CopyFileList = The list with the files which will be copied. You can let this by default
 .EXAMPLE
 	How to use this script:
 		1. When you start the browser for the first time, you need to create one profile as template. Change every setting you need to use for other profiles.
@@ -38,10 +39,11 @@
 
 #Vars needs to be filled
 $Browser = "brave" #[ "brave" | "chrome" | "msedge" ]
-$UserName = "UserName"
+$UserName = "RamziMons"
 $TemplateFolderName = "Default" #This is the template profile folder name
 $ProfilePrefix = "Profile"
 $ExcludeFolderFile = "NoCopySync.txt" #When this file is located in the root of the profile folder, this profile will not replaced with the default profile. This one will skipped
+$CopyFileList = @("Bookmarks","Favicons","Preferences","PreferredApps","Secure Preferences","Shortcuts") #Choose which files needs to be copied.
 
 #Automation Vars.
 # Don't change below this line!
@@ -78,8 +80,10 @@ Foreach($Profile in $ProfileList){
     #Will only applied when the $ExcludeFolderFile doesn't exist in the profile folder
     If((Test-Path $Checkfile) -eq $False){
         Try{
-            Remove-Item "$UserData\$Profile\*" -Recurse -ErrorAction Stop
-            Copy-Item -Path "$Userdata\$TemplateFolderName\*" -Destination "$UserData\$Profile" -recurse -ErrorAction Stop
+            #Remove-Item "$UserData\$Profile\*" -Recurse -ErrorAction Stop
+            foreach($File in $CopyFileList){
+				Copy-Item -Path "$Userdata\$TemplateFolderName\$File" -Destination "$UserData\$Profile" -recurse -ErrorAction Stop
+			}
         }
         Catch{
             Write-Host "There are some errors with the removal and/or copy of the content for $Profile. Please check manually" -ForegroundColor White -BackgroundColor Red
