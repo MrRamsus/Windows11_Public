@@ -47,7 +47,7 @@ $CopyFileList = @("Bookmarks","Favicons","Preferences","PreferredApps","Secure P
 
 #Automation Vars.
 # Don't change below this line!
-if ($UserName -ne "CustomUserName") {
+if ($UserName -eq "CustomUserName"){
 	$UserName = [System.Environment]::UserName
 }
 If($Browser -eq "brave"){
