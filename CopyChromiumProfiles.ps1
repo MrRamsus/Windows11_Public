@@ -62,12 +62,19 @@ ElseIf($Browser -eq "msedge"){
     $UserData = "C:\Users\$UserName\AppData\Local\Microsoft\Edge\User Data" #Change the username #See .PARAMETER message for known alternative value
     $ProcessName = "msedge" #See .PARAMETER message for known alternative value [ "brave" | "chrome" | "msedge" ]
 }
+#Check if $UserData exist
+if (!(Test-Path $UserData)) {
+	throw "UserData path is not found. The script will stop! Please fill in the correct UserData and/or Browser en retry again."
+	Start-Sleep -Seconds 5
+	Exit 1
+}
 $ProfileList = (Get-ChildItem -Path $UserData -Directory | Where-Object {$_.Name -like "$ProfilePrefix *" -and $_.Name -ne $TemplateFolderName}).Name
 $ProcessCheck = get-process $ProcessName -ErrorAction SilentlyContinue
 
 #Start script
 # Don't change below this line!
 #Stop the browser process. This is needed to remove/copy the profile data
+$ErrorList = @()
 IF($ProcessCheck){
     Try{
         Stop-Process -Name $ProcessName -Force -ErrorAction Stop
@@ -77,7 +84,7 @@ IF($ProcessCheck){
     }
 }
 
-#Remove and copy each profile data
+#Copy each profile data
 Foreach($Profile in $ProfileList){
     $CheckFile = "$UserData\$Profile\$ExcludeFolderFile"
     #Will only applied when the $ExcludeFolderFile doesn't exist in the profile folder
@@ -88,7 +95,20 @@ Foreach($Profile in $ProfileList){
 			}
         }
         Catch{
-            Write-Host "There are some errors with the removal and/or copy of the content for $Profile. Please check manually" -ForegroundColor White -BackgroundColor Red
+            Throw "There are some errors with the removal and/or copy of the content for $Profile. Please check manually."
+			$ErrorList += $Profile
         }
     }
+}
+
+#Notify user if copy has been completed succesfuly
+if ($ErrorList.Count -eq 0) {
+	Write-Host "All your profiles has been copied succesfully!" -ForegroundColor Green
+}
+elseif ($ErrorList.Count -eq $ProfileList.Count) {
+	Throw "None of your profiles has been copied!"
+}
+elseif ($ErrorList.Count -ne 0 -and $ErrorList.Count -ne $ProfileList.Count) {
+	Write-Host "The following profiles has not been copied"
+	Write-Host $ErrorList
 }
